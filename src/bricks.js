@@ -133,9 +133,12 @@ export default (options = {}) => {
 
       spanLength = element.getAttribute('data-span') || 1;
       originalSpanLength = element.getAttribute('data-span-o') || spanLength
-      maxSpan = columnHeights.length - columnTarget;
 
-      if(element.getAttribute('data-packed') === null) {
+      maxSpan = columnHeights.length - columnTarget;
+      spanLength = parseInt(spanLength);
+      originalSpanLength = parseInt(originalSpanLength);
+
+      if(element.getAttribute('data-packed') === null) {+
         element.setAttribute('data-span-o', spanLength)
       }
 
@@ -148,11 +151,28 @@ export default (options = {}) => {
 
       nodeTop = `${ columnHeights[columnTarget] }px`
 
-      if(spanLength > 1) {
-        nodeLeft = `${ (columnTarget * nodesWidths[index > 0 ? index-1 : 0]) + (columnTarget * sizeDetail.gutter) }px`
-      } else {
-        nodeLeft = `${ (columnTarget * nodesWidths[index]) + (columnTarget * sizeDetail.gutter) }px`
+      nodeLeft = 0;
+
+      if(columnTarget > 0) {
+
+        // starting point from left
+        let leftLimit = index-columnTarget;
+
+        // in case of tallest column on left
+        for(let j = 0; j < columnTarget; j++) {
+            if(columnHeights[j] > columnHeights[columnTarget]) {
+              leftLimit += j;
+            }
+        }
+
+        // sum widths of bricks on the left
+        for(let i = leftLimit; i < index; i++) {
+            nodeLeft += nodesWidths[i] + sizeDetail.gutter;
+        }
+
       }
+
+      nodeLeft = `${ nodeLeft }px`;
 
       element.style.position  = 'absolute'
       // support positioned elements (default) or transformed elements
@@ -163,8 +183,8 @@ export default (options = {}) => {
         element.style.transform = `translate3d(${ nodeLeft }, ${ nodeTop }, 0)`
       }
 
-      element.setAttribute(packed, '')
       element.setAttribute('data-span', spanLength)
+      element.setAttribute(packed, '')
 
       // ignore nodes with no width and/or height
       nodeWidth  = nodesWidths[index]
