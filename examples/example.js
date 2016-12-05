@@ -1,13 +1,13 @@
 // import Bricks
 
-import Bricks from 'bricks.js'
+//import Bricks from 'bricks.js'
 
 // define your grid at different breakpoints, mobile first (smallest to largest)
 
 const sizes = [
-  { columns: 2, gutter: 10 },                   // assumed to be mobile, because of the missing mq property
-  { mq: '768px', columns: 3, gutter: 25 },
-  { mq: '1024px', columns: 4, gutter: 50 }
+  { columns: 1, gutter: 10 },                   // assumed to be mobile, because of the missing mq property
+  { mq: '768px', columns: 2, gutter: 10 },
+  { mq: '1024px', columns: 3, gutter: 10 }
 ]
 
 // create an instance
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
 // add new items via AJAX
 
+/*
 fetch('path/to.html')
   .then(response => response.text())
   .then(html => {
@@ -43,4 +44,4 @@ fetch('path/to.html')
 
     // position them within the existing grid
     instance.update()
-  })
+  })*/

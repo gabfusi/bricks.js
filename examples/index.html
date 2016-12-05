@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="it">
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+    <style>
+
+      .container{
+        width: 960px;
+        margin: 5em auto;
+      }
+
+      .tile{
+        width: 300px;
+        height: 200px;
+        background: #FF0000;
+      }
+
+      .tile[data-span] {
+        background: #FF5500;
+      }
+
+      .tile[data-span="2"] {
+        width: 610px;
+      }
+      .tile[data-span="3"] {
+        width: 920px;
+      }
+
+      .tile.tall{
+        height: 500px;
+      }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+      <div class="tile" data-span="2"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile" data-span="3"></div>
+      <div class="tile" data-span="3"></div>
+      <div class="tile tall"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+    </div>
+
+    <script src="../dist/bricks.min.js"></script>
+    <script src="example.js"></script>
+
+</body>
+</html>

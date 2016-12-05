@@ -124,14 +124,37 @@ export default (options = {}) => {
   }
 
   function setNodesStyles() {
+    let spanLength;
+    let originalSpanLength;
+    let maxSpan;
+
     nodes.forEach((element, index) => {
       columnTarget = columnHeights.indexOf(Math.min.apply(Math, columnHeights))
 
+      spanLength = element.getAttribute('data-span') || 1;
+      originalSpanLength = element.getAttribute('data-span-o') || spanLength
+      maxSpan = columnHeights.length - columnTarget;
+
+      if(element.getAttribute('data-packed') === null) {+
+        element.setAttribute('data-span-o', spanLength)
+      }
+
+      if(spanLength !== originalSpanLength) {
+         spanLength = originalSpanLength;
+      }
+      if(spanLength > maxSpan) {
+          spanLength = maxSpan;
+      }
+
+      nodeTop = `${ columnHeights[columnTarget] }px`
+
+      if(spanLength > 1) {
+        nodeLeft = `${ (columnTarget * nodesWidths[index > 0 ? index-1 : 0]) + (columnTarget * sizeDetail.gutter) }px`
+      } else {
+        nodeLeft = `${ (columnTarget * nodesWidths[index]) + (columnTarget * sizeDetail.gutter) }px`
+      }
+
       element.style.position  = 'absolute'
-
-      nodeTop  = `${ columnHeights[columnTarget] }px`
-      nodeLeft = `${ (columnTarget * nodesWidths[index]) + (columnTarget * sizeDetail.gutter) }px`
-
       // support positioned elements (default) or transformed elements
       if(position) {
         element.style.top  = nodeTop
@@ -141,14 +164,23 @@ export default (options = {}) => {
       }
 
       element.setAttribute(packed, '')
+      element.setAttribute('data-span', spanLength)
 
       // ignore nodes with no width and/or height
       nodeWidth  = nodesWidths[index]
       nodeHeight = nodesHeights[index]
 
       if(nodeWidth && nodeHeight) {
-        columnHeights[columnTarget] += nodeHeight + sizeDetail.gutter
+        //columnHeights[columnTarget] += nodeHeight + sizeDetail.gutter
+        if(spanLength > 1) {
+          for( let i = columnTarget; i < columnTarget+spanLength && i < columnHeights.length; i++) {
+              columnHeights[i] += nodeHeight + sizeDetail.gutter;
+          }
+        } else {
+          columnHeights[columnTarget] += nodeHeight + sizeDetail.gutter
+        }
       }
+
     })
   }
 
@@ -156,7 +188,7 @@ export default (options = {}) => {
 
   function setContainerStyles() {
     container.style.position = 'relative'
-    container.style.width    = `${ sizeDetail.columns * nodesWidth + (sizeDetail.columns - 1) * sizeDetail.gutter }px`
+    container.style.width    = `${ sizeDetail.columns * nodeWidth + (sizeDetail.columns - 1) * sizeDetail.gutter }px`
     container.style.height   = `${ Math.max.apply(Math, columnHeights) - sizeDetail.gutter }px`
   }
 
