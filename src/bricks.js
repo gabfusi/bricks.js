@@ -135,7 +135,7 @@ export default (options = {}) => {
       originalSpanLength = element.getAttribute('data-span-o') || spanLength
       maxSpan = columnHeights.length - columnTarget;
 
-      if(element.getAttribute('data-packed') === null) {+
+      if(element.getAttribute('data-packed') === null) {
         element.setAttribute('data-span-o', spanLength)
       }
 
