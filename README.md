@@ -3,9 +3,8 @@ This fork contains a feature for spanning items through the grid.
 
 eg.
 
-You can specify a `data-span` equal to 2, the tile width will be doubled.
+If you add a `data-span` attribute equal to 2, the tile width will be doubled;
 You should also specify a fixed width in your stylesheet.
-see example folder for more info.
 
 ```html
 <div class="container">
@@ -15,6 +14,8 @@ see example folder for more info.
   ...
 </div>
 ```
+
+See example folder for more info.
 
 
 # Bricks.js
