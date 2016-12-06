@@ -1,3 +1,22 @@
+# This is a fork of Bricks.js
+This fork contains a feature for spanning items through the grid.
+
+eg.
+
+You can specify a `data-span` equal to 2, the tile width will be doubled.
+You should also specify a fixed width in your stylesheet.
+see example folder for more info.
+
+```html
+<div class="container">
+  <div class="tile"></div>
+  <div class="tile" data-span="2"></div>
+  <div class="tile" data-span="3"></div>
+  ...
+</div>
+```
+
+
 # Bricks.js
 
 [![Bricks.js on NPM](https://img.shields.io/npm/v/bricks.js.svg?style=flat-square)](https://www.npmjs.com/package/bricks.js)
