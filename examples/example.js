@@ -7,7 +7,8 @@
 const sizes = [
   { columns: 1, gutter: 10 },                   // assumed to be mobile, because of the missing mq property
   { mq: '768px', columns: 2, gutter: 10 },
-  { mq: '1024px', columns: 3, gutter: 10 }
+  { mq: '1024px', columns: 3, gutter: 10 },
+  { mq: '1440px', columns: 4, gutter: 10 }
 ]
 
 // create an instance

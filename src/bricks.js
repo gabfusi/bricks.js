@@ -20,6 +20,7 @@ export default (options = {}) => {
   let nodeLeft
   let nodeWidth
   let nodeHeight
+  let minNodeWidth
 
   let nodes
   let nodesWidths
@@ -121,6 +122,8 @@ export default (options = {}) => {
 
     nodesWidths  = nodes.map(element => element.clientWidth)
     nodesHeights = nodes.map(element => element.clientHeight)
+    // requires at least one item with span = 1
+    minNodeWidth = Math.min.apply(Math, nodesWidths)
   }
 
   function setNodesStyles() {
@@ -138,41 +141,24 @@ export default (options = {}) => {
       spanLength = parseInt(spanLength);
       originalSpanLength = parseInt(originalSpanLength);
 
-      if(element.getAttribute('data-packed') === null) {+
-        element.setAttribute('data-span-o', spanLength)
+      if(element.getAttribute('data-packed') === null) {
+          element.setAttribute('data-span-o', spanLength)
       }
 
+      // calc max span
       if(spanLength !== originalSpanLength) {
          spanLength = originalSpanLength;
       }
       if(spanLength > maxSpan) {
           spanLength = maxSpan;
       }
-
-      nodeTop = `${ columnHeights[columnTarget] }px`
-
-      nodeLeft = 0;
-
-      if(columnTarget > 0) {
-
-        // starting point from left
-        let leftLimit = index-columnTarget;
-
-        // in case of tallest column on left
-        for(let j = 0; j < columnTarget; j++) {
-            if(columnHeights[j] > columnHeights[columnTarget]) {
-              leftLimit += j;
-            }
-        }
-
-        // sum widths of bricks on the left
-        for(let i = leftLimit; i < index; i++) {
-            nodeLeft += nodesWidths[i] + sizeDetail.gutter;
-        }
-
+      if(columnTarget < columnHeights.length-1 && columnHeights[columnTarget+1] > columnHeights[columnTarget]) {
+          spanLength = 1;
       }
 
-      nodeLeft = `${ nodeLeft }px`;
+      // calc coordinates
+      nodeTop = `${ columnHeights[columnTarget] }px`
+      nodeLeft = `${ columnTarget * (minNodeWidth + sizeDetail.gutter) }px`;
 
       element.style.position  = 'absolute'
       // support positioned elements (default) or transformed elements
@@ -191,10 +177,10 @@ export default (options = {}) => {
       nodeHeight = nodesHeights[index]
 
       if(nodeWidth && nodeHeight) {
-        //columnHeights[columnTarget] += nodeHeight + sizeDetail.gutter
+
         if(spanLength > 1) {
           for( let i = columnTarget; i < columnTarget+spanLength && i < columnHeights.length; i++) {
-              columnHeights[i] += nodeHeight + sizeDetail.gutter;
+              columnHeights[i] += nodeHeight + sizeDetail.gutter
           }
         } else {
           columnHeights[columnTarget] += nodeHeight + sizeDetail.gutter
@@ -208,7 +194,7 @@ export default (options = {}) => {
 
   function setContainerStyles() {
     container.style.position = 'relative'
-    container.style.width    = `${ sizeDetail.columns * nodeWidth + (sizeDetail.columns - 1) * sizeDetail.gutter }px`
+    container.style.width    = `${ sizeDetail.columns * minNodeWidth + (sizeDetail.columns - 1) * sizeDetail.gutter }px`
     container.style.height   = `${ Math.max.apply(Math, columnHeights) - sizeDetail.gutter }px`
   }
 
